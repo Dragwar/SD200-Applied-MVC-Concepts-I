@@ -11,11 +11,11 @@ namespace Applied_MVC_Concepts_I.Models.Domain
         public string Name { get; set; }
         public int NumberOfHours { get; set; }
 
-        public virtual HashSet<ApplicationUser> Users { get; set; }
+        public virtual List<ApplicationUser> Users { get; set; }
 
         public Course()
         {
-            Users = new HashSet<ApplicationUser>();
+            Users = new List<ApplicationUser>();
         }
     }
 }
