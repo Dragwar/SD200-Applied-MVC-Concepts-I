@@ -25,20 +25,55 @@ namespace Applied_MVC_Concepts_I.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
 
-            RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            //RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
 
             UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
-            ApplicationUser johnDoe = CreateUser(context, roleManager, userManager, "John", "Doe", "johndoe@test.com", "johndoe@test.com");
-            ApplicationUser janeDoe = CreateUser(context, roleManager, userManager, "Jane", "Doe", "janeDoe@test.com", "janeDoe@test.com");
+            //ApplicationUser johnDoe = CreateUser(context, roleManager, userManager, "John", "Doe", "johndoe@test.com", "johndoe@test.com");
+            //ApplicationUser janeDoe = CreateUser(context, roleManager, userManager, "Jane", "Doe", "janeDoe@test.com", "janeDoe@test.com");
+            ApplicationUser johnDoe;
+            ApplicationUser janeDoe;
 
             Course SoftwareDev = new Course() { Id = Guid.NewGuid(), Name = "Software Developer", NumberOfHours = 330 };
             Course CyberDef = new Course() { Id = Guid.NewGuid(), Name = "Cyber Defense", NumberOfHours = 340 };
 
-            johnDoe.Courses.Add(SoftwareDev);
+            /*NOTE: failed to create a many-to-many*/
 
-            janeDoe.Courses.Add(SoftwareDev);
-            janeDoe.Courses.Add(CyberDef);
+            if (!context.Users.Any(user => user.UserName == "johndoe@test.com") && !context.Users.Any(user => user.UserName == "janeDoe@test.com"))
+            {
+                johnDoe = new ApplicationUser
+                {
+                    FirstName = "John",
+                    LastName = "Doe",
+                    UserName = "johndoe@test.com",
+                    Email = "johndoe@test.com",
+                    Courses = new List<Course>() { SoftwareDev },
+                };
+
+                janeDoe = new ApplicationUser
+                {
+                    FirstName = "Jane",
+                    LastName = "Doe",
+                    UserName = "janeDoe@test.com",
+                    Email = "janeDoe@test.com",
+                    Courses = new List<Course>() { SoftwareDev, CyberDef },
+                };
+
+                userManager.Create(johnDoe, "Password-1");
+                userManager.Create(janeDoe, "Password-1");
+            }
+            else
+            {
+                johnDoe = context.Users.First(user => user.UserName == "johndoe@test.com");
+                janeDoe = context.Users.First(user => user.UserName == "janeDoe@test.com");
+            }
+
+
+
+            //johnDoe.Courses.Add(SoftwareDev);
+
+            //janeDoe.Courses.Add(SoftwareDev);
+            //janeDoe.Courses.Add(CyberDef);
 
             SoftwareDev.Users.Add(johnDoe);
 
@@ -50,65 +85,65 @@ namespace Applied_MVC_Concepts_I.Migrations
             context.SaveChanges();
         }
 
-        private ApplicationUser CreateUser(
-            Applied_MVC_Concepts_I.Models.ApplicationDbContext context,
-            RoleManager<IdentityRole> roleManager,
-            UserManager<ApplicationUser> userManager,
-            string firstName,
-            string lastName,
-            string userName,
-            string userEmail,
-            string userPassword = "Password-1",
-            string userRole = null
-            )
-        {
-            /// <summary>
-            ///    Adding role if it doesn't exist. 
-            /// </summary>
-            if (!string.IsNullOrEmpty(userRole) && !context.Roles.Any(role => role.Name == userRole))
-            {
-                IdentityRole newRole = new IdentityRole(userRole);
-                roleManager.Create(newRole);
-            }
+        //private ApplicationUser CreateUser(
+        //    Applied_MVC_Concepts_I.Models.ApplicationDbContext context,
+        //    RoleManager<IdentityRole> roleManager,
+        //    UserManager<ApplicationUser> userManager,
+        //    string firstName,
+        //    string lastName,
+        //    string userName,
+        //    string userEmail,
+        //    string userPassword = "Password-1",
+        //    string userRole = null
+        //    )
+        //{
+        //    /// <summary>
+        //    ///    Adding role if it doesn't exist. 
+        //    /// </summary>
+        //    if (!string.IsNullOrEmpty(userRole) && !context.Roles.Any(role => role.Name == userRole))
+        //    {
+        //        IdentityRole newRole = new IdentityRole(userRole);
+        //        roleManager.Create(newRole);
+        //    }
 
-            // Creating the adminUser
-            ApplicationUser newUser;
+        //    // Creating the adminUser
+        //    ApplicationUser newUser;
 
 
-            /// <summary>
-            ///    Adding the default user and checks to see if the default user
-            ///    already exists on the database before adding one.
-            /// </summary>
-            if (!context.Users.Any(user => user.UserName == userName))
-            {
-                newUser = new ApplicationUser
-                {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    UserName = userName,
-                    Email = userEmail
-                };
+        //    /// <summary>
+        //    ///    Adding the default user and checks to see if the default user
+        //    ///    already exists on the database before adding one.
+        //    /// </summary>
+        //    if (!context.Users.Any(user => user.UserName == userName))
+        //    {
+        //        newUser = new ApplicationUser
+        //        {
+        //            FirstName = firstName,
+        //            LastName = lastName,
+        //            UserName = userName,
+        //            Email = userEmail
+        //        };
 
-                userManager.Create(newUser, userPassword);
-            }
-            else
-            {
-                /// <summary>
-                ///     I'm using ".First()" and not ".FirstOrDefault()" because
-                ///     the if statement above this will generate the user if
-                ///     the user doesn't already exist in the database
-                ///     (I'm 100% expecting this user to be in the database)
-                /// </summary>
-                newUser = context.Users.First(user => user.UserName == userName);
-            }
+        //        userManager.Create(newUser, userPassword);
+        //    }
+        //    else
+        //    {
+        //        /// <summary>
+        //        ///     I'm using ".First()" and not ".FirstOrDefault()" because
+        //        ///     the if statement above this will generate the user if
+        //        ///     the user doesn't already exist in the database
+        //        ///     (I'm 100% expecting this user to be in the database)
+        //        /// </summary>
+        //        newUser = context.Users.First(user => user.UserName == userName);
+        //    }
 
-            // Make sure the user is on the proper role
-            if (!string.IsNullOrEmpty(userRole) && !userManager.IsInRole(newUser.Id, userRole))
-            {
-                userManager.AddToRole(newUser.Id, userRole);
-            }
+        //    // Make sure the user is on the proper role
+        //    if (!string.IsNullOrEmpty(userRole) && !userManager.IsInRole(newUser.Id, userRole))
+        //    {
+        //        userManager.AddToRole(newUser.Id, userRole);
+        //    }
 
-            return newUser;
-        }
+        //    return newUser;
+        //}
     }
 }
