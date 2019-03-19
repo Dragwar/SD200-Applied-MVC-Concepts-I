@@ -25,7 +25,7 @@ namespace Applied_MVC_Concepts_I.Migrations
             UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
             ApplicationUser johnDoe = CreateUser(context, roleManager, userManager, "John", "Doe", "johndoe@test.com", "johndoe@test.com");
-            ApplicationUser janeDoe = CreateUser(context, roleManager, userManager, "Jane", "Doe", "janeDoe@test.com", "janeDoe@test.com");
+            ApplicationUser janeDoe = CreateUser(context, roleManager, userManager, "Jane", "Doe", "janedoe@test.com", "janedoe@test.com");
 
             Course SoftwareDev = CreateCourse(330, "Software Developer");
             Course CyberDef = CreateCourse(340, "Cyber Defense");
