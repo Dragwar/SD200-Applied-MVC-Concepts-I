@@ -27,17 +27,19 @@ namespace Applied_MVC_Concepts_I.Migrations
             ApplicationUser johnDoe = CreateUser(context, roleManager, userManager, "John", "Doe", "johndoe@test.com", "johndoe@test.com");
             ApplicationUser janeDoe = CreateUser(context, roleManager, userManager, "Jane", "Doe", "janedoe@test.com", "janedoe@test.com");
 
-            Course SoftwareDev = CreateCourse(330, "Software Developer");
-            Course CyberDef = CreateCourse(340, "Cyber Defense");
+            Course softwareDev = CreateCourse(330, "Software Developer");
+            Course cyberDef = CreateCourse(340, "Cyber Defense");
+            Course networkSecurityDiploma = CreateCourse(400, " Network Security Diploma");
 
 
-            SoftwareDev.Users.Add(johnDoe);
+            softwareDev.Users.Add(johnDoe);
 
-            SoftwareDev.Users.Add(janeDoe);
-            CyberDef.Users.Add(janeDoe);
+            softwareDev.Users.Add(janeDoe);
+            cyberDef.Users.Add(janeDoe);
 
-            context.Courses.AddOrUpdate(p => p.Name, SoftwareDev);
-            context.Courses.AddOrUpdate(p => p.Name, CyberDef);
+            context.Courses.AddOrUpdate(p => p.Name, softwareDev);
+            context.Courses.AddOrUpdate(p => p.Name, cyberDef);
+            context.Courses.AddOrUpdate(p => p.Name, networkSecurityDiploma);
             context.SaveChanges();
         }
 

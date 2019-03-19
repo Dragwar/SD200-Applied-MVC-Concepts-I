@@ -11,6 +11,8 @@ namespace Applied_MVC_Concepts_I.Models.Domain
         public string Name { get; set; }
         public int NumberOfHours { get; set; }
 
+        public int NumberOfEnrollments { get => Users.Count; }
+
         public virtual List<ApplicationUser> Users { get; set; }
 
         public Course()

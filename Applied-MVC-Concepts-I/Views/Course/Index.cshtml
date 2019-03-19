@@ -1,0 +1,27 @@
+﻿@model List<CourseIndexViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <thead>
+        <tr style="font-weight: 600;">
+            <td>Course Name</td>
+            <td>Number of Hours</td>
+            <td>Number of Enrollments</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (CourseIndexViewModel course in Model)
+        {
+            <tr>
+                <td>@course.Name</td>
+                <td>@course.NumberOfHours</td>
+                <td>@course.NumberOfEnrollments</td>
+                <td>link</td>
+            </tr>
+        }
+    </tbody>
+</table>
