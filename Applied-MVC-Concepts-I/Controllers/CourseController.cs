@@ -18,11 +18,12 @@ namespace Applied_MVC_Concepts_I.Controllers
         }
 
         private List<Course> GetCourses() => DbContext.Courses.ToList();
+        private Course GetCourseById(Guid id) => GetCourses().FirstOrDefault(course => course.Id == id);
 
         public ActionResult Index()
         {
             List<CourseIndexViewModel> model = GetCourses()
-                .Select(course => CourseIndexViewModel.GenerateNewCourseViewModel(course))
+                .Select(course => CourseIndexViewModel.GenerateNewViewModel(course))
                 .ToList();
 
             return View(model);
@@ -31,8 +32,17 @@ namespace Applied_MVC_Concepts_I.Controllers
         [HttpGet]
         public ActionResult CourseDetails(Guid? id)
         {
+            if (!id.HasValue)
+                return RedirectToAction(nameof(CourseController.Index));
 
-            return View();
+            Course foundCourse = GetCourseById(id.Value);
+
+            if (foundCourse == null)
+                return RedirectToAction(nameof(CourseController.Index));
+
+            CourseDetailsViewModel model = CourseDetailsViewModel.GenerateNewViewModel(foundCourse);
+
+            return View(model);
         }
     }
 }

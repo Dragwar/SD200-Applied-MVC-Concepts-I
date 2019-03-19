@@ -1,23 +1,26 @@
 ﻿using Applied_MVC_Concepts_I.Models.Domain;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Applied_MVC_Concepts_I.Models.ViewModels
 {
-    public class CourseIndexViewModel
+    public class CourseDetailsViewModel
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public int NumberOfHours { get; set; }
         public int NumberOfEnrollments { get; set; }
-        public static CourseIndexViewModel GenerateNewViewModel(Course course)
+        public List<string> AllEnrolledUsersNames { get; set; }
+
+        public string GetAllEnrolledUsersNamesAsString { get => string.Join(", ", AllEnrolledUsersNames); }
+
+        public static CourseDetailsViewModel GenerateNewViewModel(Course course)
         {
-            return new CourseIndexViewModel()
+            return new CourseDetailsViewModel()
             {
-                Id = course.Id,
                 Name = course.Name,
                 NumberOfEnrollments = course.NumberOfEnrollments,
                 NumberOfHours = course.NumberOfHours,
+                AllEnrolledUsersNames = course.Users.Select(user => user.FullName).ToList(),
             };
         }
     }

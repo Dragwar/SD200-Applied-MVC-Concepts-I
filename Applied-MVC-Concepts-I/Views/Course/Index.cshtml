@@ -1,9 +1,9 @@
 ﻿@model List<CourseIndexViewModel>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Courses";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <table class="table">
     <thead>
@@ -20,7 +20,9 @@
                 <td>@course.Name</td>
                 <td>@course.NumberOfHours</td>
                 <td>@course.NumberOfEnrollments</td>
-                <td>link</td>
+                <td>
+                    @Html.ActionLink("Details", "CourseDetails", new { Id = course.Id }, new { @class = "btn btn-success" })
+                </td>
             </tr>
         }
     </tbody>
