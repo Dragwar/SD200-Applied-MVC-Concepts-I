@@ -18,8 +18,13 @@ namespace Applied_MVC_Concepts_I.Models.ViewModels
             return new CourseDetailsViewModel()
             {
                 Name = course.Name,
-                NumberOfEnrollments = course.NumberOfEnrollments,
+
+                // Get the number of users enrolled in the passed in course
+                NumberOfEnrollments = course.Users.Count,
+
                 NumberOfHours = course.NumberOfHours,
+
+                // Get the FullName of each enrolled user into a list
                 AllEnrolledUsersNames = course.Users.Select(user => user.FullName).ToList(),
             };
         }
